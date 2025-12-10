@@ -40,4 +40,9 @@ export default {
   resetPassword<T = any>(params?: any): Promise<T> {
     return request.put<T>(`/admin/updatePassword`, params);
   },
+
+  // 修改密码
+  changePassword<T = any>(params?: any): Promise<T> {
+    return request.put<T>(`/admin/updatePersonalPassword`, params);
+  },
 };

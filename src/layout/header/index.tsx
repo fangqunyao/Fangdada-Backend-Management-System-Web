@@ -9,7 +9,7 @@ import storage from "../../utils/storage";
 import styles from "./index.module.css";
 
 export default function NavHeader() {
-  const { collapsed, updataCollapsed } = useStore();
+  const { collapsed, updataCollapsed, resetStore } = useStore();
   const navigate = useNavigate();
   const items: MenuProps["items"] = [
     {
@@ -27,6 +27,7 @@ export default function NavHeader() {
     if (e.key === "layout") {
       console.log("退出登录");
       storage.clearAll();
+      resetStore();
       window.location.href = "/login";
     } else if (e.key === "profile") {
       navigate("/profile");

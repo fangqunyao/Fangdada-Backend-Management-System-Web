@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Card, Avatar, Button, Space, Tabs, Form, Input, Upload } from "antd";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  Avatar,
+  Button,
+  Space,
+  Tabs,
+  Form,
+  Input,
+  Upload,
+  message,
+} from "antd";
 import storage from "@/utils/storage";
+import { useStore } from "@/store";
+import userApi from "@/api/user";
 import styles from "./index.module.css";
 
 interface UserInfo {
@@ -15,8 +28,23 @@ interface UserInfo {
 }
 
 const Profile: React.FC = () => {
+  const navigate = useNavigate();
+  const { resetStore } = useStore();
   const [userData, setUserData] = useState<UserInfo | null>(null);
   const [form] = Form.useForm();
+  const [pwdForm] = Form.useForm();
+
+  // 格式化为 YYYY-MM-DD HH:mm:ss
+  const formatDateTime = (value?: string) => {
+    if (!value) return "-";
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return value;
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return (
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+      `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+    );
+  };
 
   useEffect(() => {
     const info = storage.getItem("info");
@@ -63,8 +91,44 @@ const Profile: React.FC = () => {
             <Input.TextArea placeholder="请输入备注" rows={4} />
           </Form.Item>
           <Space>
-            <Button type="primary">保存</Button>
-            <Button>关闭</Button>
+            <Button
+              type="primary"
+              onClick={async () => {
+                try {
+                  const values = await form.validateFields();
+                  // 调用接口保存
+                  const params = { ...userData, ...values };
+                  await userApi.updateUserInfo(params);
+                  // 更新本地 storage
+                  const newInfo = { ...storage.getItem("info"), ...values };
+                  storage.setItem("info", newInfo);
+                  setUserData(newInfo as any);
+                  message.success("保存成功");
+                } catch (err) {
+                  // 校验失败或接口错误
+                  console.error(err);
+                }
+              }}
+            >
+              保存
+            </Button>
+            <Button
+              onClick={() => {
+                // 关闭：重置为本地数据
+                const info = storage.getItem("info");
+                if (info) {
+                  form.setFieldsValue({
+                    username: info.username,
+                    nickname: info.nickname,
+                    phone: info.phone,
+                    email: info.email,
+                    note: info.note,
+                  });
+                }
+              }}
+            >
+              关闭
+            </Button>
           </Space>
         </Form>
       ),
@@ -73,19 +137,70 @@ const Profile: React.FC = () => {
       key: "password",
       label: "修改密码",
       children: (
-        <Form layout="vertical">
-          <Form.Item label="旧密码" required>
+        <Form form={pwdForm} layout="vertical">
+          <Form.Item
+            name="oldPassword"
+            label="旧密码"
+            rules={[{ required: true, message: "请输入旧密码" }]}
+          >
             <Input.Password placeholder="请输入旧密码" />
           </Form.Item>
-          <Form.Item label="新密码" required>
+          <Form.Item
+            name="newPassword"
+            label="新密码"
+            rules={[{ required: true, message: "请输入新密码" }]}
+          >
             <Input.Password placeholder="请输入新密码" />
           </Form.Item>
-          <Form.Item label="确认密码" required>
+          <Form.Item
+            name="confirmPassword"
+            label="确认密码"
+            dependencies={["newPassword"]}
+            rules={[
+              { required: true, message: "请确认新密码" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("newPassword") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("两次输入的密码不一致"));
+                },
+              }),
+            ]}
+          >
             <Input.Password placeholder="请确认密码" />
           </Form.Item>
           <Space>
-            <Button type="primary">保存</Button>
-            <Button>关闭</Button>
+            <Button
+              type="primary"
+              onClick={async () => {
+                try {
+                  const values = await pwdForm.validateFields();
+                  // 调用修改密码接口
+                  await userApi.changePassword({
+                    ID: userData.id,
+                    Password: values.oldPassword,
+                    NewPassword: values.newPassword,
+                    ResetPassword: values.confirmPassword,
+                  });
+                  message.success("密码修改成功");
+                  pwdForm.resetFields();
+                  // 清除本地登录信息，强制退出登录
+                  storage.clearAll();
+                  // 清除 store 中的所有状态（包括选项卡）
+                  resetStore();
+                  // 延迟 500ms 后跳转到登录页，让用户看到成功提示
+                  setTimeout(() => {
+                    navigate("/login", { replace: true });
+                  }, 500);
+                } catch (err) {
+                  console.error(err);
+                }
+              }}
+            >
+              保存
+            </Button>
+            <Button onClick={() => pwdForm.resetFields()}>关闭</Button>
           </Space>
         </Form>
       ),
@@ -128,7 +243,9 @@ const Profile: React.FC = () => {
             </div>
             <div className={styles.infoItem}>
               <span className={styles.label}>创建时间：</span>
-              <span className={styles.value}>{userData.createTime || "-"}</span>
+              <span className={styles.value}>
+                {formatDateTime(userData.createTime)}
+              </span>
             </div>
           </div>
         </Card>
