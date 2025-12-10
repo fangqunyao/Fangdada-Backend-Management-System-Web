@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background-color: #a79797;
+    padding: 0 20px;
+    color: #241d1d;
+}
+.left{
+    display: flex;
+    align-items: center;
+}
+.nickName{
+    cursor: pointer;
+}

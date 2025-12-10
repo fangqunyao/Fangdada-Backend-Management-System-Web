@@ -1,0 +1,9 @@
+.wrapdept{
+    padding: 6px;
+}
+
+/* customTable 支持通过 --custom-row-padding 自定义单元格上下内边距，从而影响行高 */
+.customTable :global(.ant-table-cell) {
+    padding-top: var(--custom-row-padding, 12px);
+    padding-bottom: var(--custom-row-padding, 12px);
+}

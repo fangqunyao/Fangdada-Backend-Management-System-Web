@@ -1,0 +1,28 @@
+.my-table {
+	background: #fafbfc;
+	border-radius: 8px;
+	border: 1px solid #e4e7ed;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+	overflow: hidden;
+}
+
+.my-table :global(.ant-table-thead > tr > th) {
+	font-weight: bold;
+	background: #f5f7fa;
+	color: #333;
+	border-bottom: 1px solid #e4e7ed;
+}
+
+.my-table :global(.ant-table-tbody > tr:hover > td) {
+	background: #e6f7ff;
+}
+
+.my-table :global(.ant-table-cell) {
+	border-right: 1px solid #e4e7ed;
+}
+.my-table :global(.ant-table-row > td:last-child) {
+	border-right: none;
+}
+.my-table :global(.ant-table-pagination) {
+	margin-top: 16px;
+}

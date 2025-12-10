@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.wrap-table{
+  background-color: aliceblue;
+  border-radius: 5px;
+  color: #000;
+
+  .header{  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+    padding: 10px;
+    
+    .action button{
+      margin-left: 15px;
+    }
+  }
+}

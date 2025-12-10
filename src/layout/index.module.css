@@ -1,0 +1,10 @@
+.content{
+    background-color: #4c668d;
+    padding: 20px;
+    overflow: hidden;
+    height: calc(100vh - 100px);
+    .wrapper{
+        max-height: calc(100vh - 180px);
+        /* overflow: auto; */
+    }
+}

@@ -1,0 +1,33 @@
+.tabsWrapper {
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tabsWrapper :global(.ant-tabs) {
+  margin-bottom: 0;
+}
+
+.tabsWrapper :global(.ant-tabs-nav) {
+  margin: 0;
+}
+
+.tabLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 8px;
+}
+
+.closeIcon {
+  font-size: 12px;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: inline-flex;
+}
+
+.closeIcon:hover {
+  opacity: 1;
+  color: #ff4d4f;
+}
