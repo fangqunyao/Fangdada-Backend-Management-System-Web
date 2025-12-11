@@ -11,6 +11,8 @@ import {
   CloudOutlined,
   SafetyCertificateOutlined,
   BarChartOutlined,
+  RocketOutlined,
+  GlobalOutlined,
   PlusOutlined,
   EyeOutlined,
   EditOutlined,
@@ -22,78 +24,104 @@ import {
 import styles from './index.module.css';
 
 export default function Dashboard() {
-  // 模拟数据
+  // 匹配首页核心功能的统计数据
   const stats = [
     {
-      title: '总用户数',
-      value: 1234,
+      title: '活跃用户',
+      value: 10000,
       icon: <UserOutlined />,
       color: '#1890ff',
-      change: '+12%',
-      changeType: 'increase'
-    },
-    {
-      title: '活跃用户',
-      value: 892,
-      icon: <TeamOutlined />,
-      color: '#52c41a',
-      change: '+8%',
-      changeType: 'increase'
-    },
-    {
-      title: '文章总数',
-      value: 567,
-      icon: <FileTextOutlined />,
-      color: '#faad14',
       change: '+15%',
-      changeType: 'increase'
+      changeType: 'increase',
+      desc: '每日活跃用户数量'
     },
     {
-      title: '系统配置',
-      value: 89,
-      icon: <SettingOutlined />,
-      color: '#f5222d',
-      change: '-2%',
-      changeType: 'decrease'
+      title: '系统性能',
+      value: 99.9,
+      icon: <BarChartOutlined />,
+      color: '#52c41a',
+      change: '+0.1%',
+      changeType: 'increase',
+      desc: '系统响应时间(ms)'
+    },
+    {
+      title: '安全等级',
+      value: 'A+',
+      icon: <SafetyCertificateOutlined />,
+      color: '#faad14',
+      change: '稳定',
+      changeType: 'stable',
+      desc: '安全评估等级'
+    },
+    {
+      title: '企业客户',
+      value: 500,
+      icon: <TeamOutlined />,
+      color: '#722ed1',
+      change: '+8%',
+      changeType: 'increase',
+      desc: '合作企业数量'
     }
   ];
 
-  const systemStats = [
+  const systemCapabilities = [
     {
-      title: '数据库连接',
+      title: '高效性能',
       value: 98,
-      icon: <DatabaseOutlined />,
-      color: '#722ed1',
-      status: '正常'
+      icon: <RocketOutlined />,
+      color: '#1890ff',
+      status: '优秀',
+      desc: '平均响应时间 < 100ms'
     },
     {
-      title: 'API响应',
-      value: 95,
-      icon: <CloudOutlined />,
-      color: '#13c2c2',
-      status: '良好'
-    },
-    {
-      title: '安全状态',
+      title: '安全可靠',
       value: 100,
       icon: <SafetyCertificateOutlined />,
       color: '#52c41a',
-      status: '安全'
+      status: '安全',
+      desc: '7*24小时安全监控'
     },
     {
-      title: '性能监控',
-      value: 87,
+      title: '团队协作',
+      value: 95,
+      icon: <TeamOutlined />,
+      color: '#faad14',
+      status: '活跃',
+      desc: '实时协作项目数'
+    },
+    {
+      title: '数据分析',
+      value: 92,
       icon: <BarChartOutlined />,
-      color: '#fa8c16',
-      status: '良好'
+      color: '#f5222d',
+      status: '精准',
+      desc: '数据分析准确率'
+    },
+    {
+      title: '全球化',
+      value: 85,
+      icon: <GlobalOutlined />,
+      color: '#13c2c2',
+      status: '覆盖',
+      desc: '支持的国家/地区'
+    },
+    {
+      title: '灵活配置',
+      value: 96,
+      icon: <SettingOutlined />,
+      color: '#722ed1',
+      status: '灵活',
+      desc: '配置自定义程度'
     }
   ];
 
   const quickActions = [
-    { title: '新增用户', icon: <PlusOutlined />, color: '#1890ff', action: 'addUser' },
-    { title: '发布文章', icon: <FileTextOutlined />, color: '#52c41a', action: 'addPost' },
-    { title: '查看日志', icon: <EyeOutlined />, color: '#faad14', action: 'viewLogs' },
-    { title: '系统设置', icon: <SettingOutlined />, color: '#f5222d', action: 'settings' }
+    { title: '用户管理', icon: <UserOutlined />, color: '#1890ff', action: 'userManagement', desc: '管理系统用户' },
+    { title: '内容发布', icon: <FileTextOutlined />, color: '#52c41a', action: 'contentPublish', desc: '发布新内容' },
+    { title: '数据分析', icon: <BarChartOutlined />, color: '#faad14', action: 'dataAnalysis', desc: '查看数据报表' },
+    { title: '系统设置', icon: <SettingOutlined />, color: '#f5222d', action: 'systemSettings', desc: '配置系统参数' },
+    { title: '安全监控', icon: <SafetyCertificateOutlined />, color: '#13c2c2', action: 'securityMonitor', desc: '实时安全监控' },
+    { title: '团队协作', icon: <TeamOutlined />, color: '#722ed1', action: 'teamCollaboration', desc: '协作工作区' }
   ];
 
   const recentActivities = [
@@ -181,10 +209,10 @@ export default function Dashboard() {
         ))}
       </Row>
 
-      {/* 系统状态监控 */}
+      {/* 系统能力监控 - 匹配首页核心功能 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        {systemStats.map((stat, index) => (
-          <Col xs={24} sm={12} md={6} key={index}>
+        {systemCapabilities.map((stat: any, index: number) => (
+          <Col xs={24} sm={12} md={8} key={index}>
             <Card className={styles.systemCard}>
               <div className={styles.systemStat}>
                 <div className={styles.systemIcon} style={{ color: stat.color }}>
@@ -196,6 +224,7 @@ export default function Dashboard() {
                   <div className={styles.systemStatus} style={{ color: stat.color }}>
                     {stat.status}
                   </div>
+                  <div className={styles.systemDesc}>{stat.desc}</div>
                 </div>
               </div>
             </Card>

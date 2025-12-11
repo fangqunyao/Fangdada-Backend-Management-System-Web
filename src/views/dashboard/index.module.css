@@ -147,6 +147,13 @@
 .systemStatus {
   font-size: 12px;
   font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.systemDesc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 /* 快速操作卡片 */
