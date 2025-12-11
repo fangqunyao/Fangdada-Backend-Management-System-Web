@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { Button, Input, Table, Form, Switch, Modal } from "antd";
+import { Button, Input, Table, Form, Switch, Modal, Card } from "antd";
 import { useState, useEffect } from "react";
 import roleApi from "@/api/role";
 import type { getRoleList } from "@/types/role";
@@ -167,43 +167,49 @@ export default function Role() {
     },
   ];
   return (
-    <div className={styles.container}>
-      <div className={styles.toolbar}>
-        <div className={styles.leftGroup}>
-          <Input.Search
-            placeholder="搜索角色名称"
-            onSearch={(value) => {
-              handleSearch(value);
-            }}
-            allowClear
-            style={{ width: 300 }}
-          />
+    <div style={{ padding: 20 }}>
+      {/* 搜索表单 */}
+      <Card
+        className="searchCard"
+        style={{ marginBottom: 20 }}
+        bodyStyle={{ padding: 24 }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div>
+            <Input.Search
+              placeholder="搜索角色名称"
+              onSearch={(value) => {
+                handleSearch(value);
+              }}
+              allowClear
+              style={{ width: 300 }}
+            />
+          </div>
+          <Button type="primary" onClick={openAdd}>
+            新建
+          </Button>
         </div>
+      </Card>
 
-        <Button type="primary" style={{ marginLeft: 18 }} onClick={openAdd}>
-          新建
-        </Button>
-      </div>
-
-      <div className={styles.tableWrap}>
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={roleList}
-          pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            showSizeChanger: true,
-            pageSizeOptions: ["5", "10", "20", "50", "100"],
-            onChange: handleTableChange,
-            showTotal: (total) => `共 ${total} 条`,
-            showQuickJumper: true,
-            showLessItems: false,
-          }}
-          loading={false} // 如果需要 loading 状态可加
-        />
-      </div>
+      {/* 表格 */}
+      <Table
+        rowKey="id"
+        columns={columns}
+        dataSource={roleList}
+        className="my-table"
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          showSizeChanger: true,
+          pageSizeOptions: ["5", "10", "20", "50", "100"],
+          onChange: handleTableChange,
+          showTotal: (total) => `共 ${total} 条`,
+          showQuickJumper: true,
+          showLessItems: false,
+        }}
+        loading={false} // 如果需要 loading 状态可加
+      />
       <CreateRole mref={roleRef} getRoleList={getRoleList}></CreateRole>
       <SetPermission mref={permissionRef}></SetPermission>
     </div>

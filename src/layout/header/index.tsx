@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, MoonOutlined, SunOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Dropdown, Button, Avatar } from "antd";
+import { Dropdown, Button, Avatar, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store";
 import storage from "../../utils/storage";
@@ -9,7 +9,7 @@ import storage from "../../utils/storage";
 import styles from "./index.module.css";
 
 export default function NavHeader() {
-  const { collapsed, updataCollapsed, resetStore } = useStore();
+  const { collapsed, updataCollapsed, resetStore, isDarkTheme, toggleTheme } = useStore();
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<any>(null);
 
@@ -59,6 +59,21 @@ export default function NavHeader() {
         />
       </div>
       <div className={styles.right}>
+        <Tooltip title={isDarkTheme ? '切换到白天模式' : '切换到黑夜模式'}>
+          <Button
+            type="text"
+            icon={isDarkTheme ? <SunOutlined /> : <MoonOutlined />}
+            onClick={toggleTheme}
+            className={styles.themeToggleBtn}
+            style={{
+              fontSize: "16px",
+              width: 48,
+              height: 48,
+              marginRight: 8,
+              color: 'var(--text-primary)'
+            }}
+          />
+        </Tooltip>
         <Dropdown menu={{ items, onClick }} trigger={["hover"]}>
           <div className={styles.userInfo}>
             <Avatar size="small" icon={<UserOutlined />} style={{ marginRight: 8 }} />

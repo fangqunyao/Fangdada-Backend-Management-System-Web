@@ -10,6 +10,7 @@ import {
   Input,
   Space,
   Popconfirm,
+  Card,
   message,
 } from "antd";
 import styles from "./index.module.css";
@@ -142,35 +143,41 @@ export default function Menu() {
   ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.toolbar}>
-        <div className={styles.leftGroup}>
-          <Input.Search
-            placeholder="搜索菜单名称或路径"
-            value={query}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setQuery(e.target.value)
-            }
-            style={{ width: 300 }}
-          />
+    <div style={{ padding: 20 }}>
+      {/* 搜索表单 */}
+      <Card
+        className="searchCard"
+        style={{ marginBottom: 20 }}
+        bodyStyle={{ padding: 24 }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <Input.Search
+              placeholder="搜索菜单名称或路径"
+              value={query}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setQuery(e.target.value)
+              }
+              style={{ width: 300 }}
+            />
+            <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
+              共 {items.length} 项（匹配 {filtered.length}）
+            </span>
+          </div>
+          <Button type="primary" onClick={openAdd}>
+            新建
+          </Button>
         </div>
-        <div className={styles.count}>
-          共 {items.length} 项（匹配 {filtered.length}）
-        </div>
+      </Card>
 
-        <Button type="primary" style={{ marginLeft: 18 }} onClick={openAdd}>
-          新建
-        </Button>
-      </div>
-
-      <div className={styles.tableWrap}>
-        <Table
-          dataSource={filtered}
-          columns={columns}
-          rowKey="id"
-          pagination={{ pageSize: 8 }}
-        />
-      </div>
+      {/* 表格 */}
+      <Table
+        dataSource={filtered}
+        columns={columns}
+        rowKey="id"
+        className="my-table"
+        pagination={{ pageSize: 8 }}
+      />
 
       <Modal
         title={editing ? "编辑菜单" : "新建菜单"}

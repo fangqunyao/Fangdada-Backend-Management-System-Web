@@ -1,5 +1,101 @@
-.wrapdept{
-    padding: 6px;
+/* 搜索表单立体效果 */
+.searchCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.searchCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), #52c41a, #faad14);
+  opacity: 0.8;
+}
+
+.searchCard:hover {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.searchCard :global(.ant-card-body) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+}
+
+/* 部门管理表格自定义样式 */
+.my-table {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.my-table :global(.ant-table-thead > tr > th) {
+  font-weight: bold;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.my-table :global(.ant-table-tbody > tr:hover > td) {
+  background: rgba(77, 171, 247, 0.1);
+}
+
+.my-table :global(.ant-table-cell) {
+  border-right: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.my-table :global(.ant-table-tbody > tr) {
+  background: var(--bg-secondary);
+}
+
+.my-table :global(.ant-table-tbody > tr:nth-child(even)) {
+  background: var(--bg-primary);
+}
+
+.my-table :global(.ant-pagination-item) {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.my-table :global(.ant-pagination-item:hover) {
+  border-color: var(--accent-color);
+}
+
+.my-table :global(.ant-pagination-item-active) {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.my-table :global(.ant-pagination-item-active a) {
+  color: white;
+}
+
+.my-table :global(.ant-table-row > td:last-child) {
+  border-right: none;
+}
+
+.my-table :global(.ant-table-pagination) {
+  margin-top: 16px;
 }
 
 /* customTable 支持通过 --custom-row-padding 自定义单元格上下内边距，从而影响行高 */

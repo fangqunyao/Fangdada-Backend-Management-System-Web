@@ -48,19 +48,46 @@
 }
 
 .my-table :global(.ant-table-thead > tr > th) {
-  font-weight: bold;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-color);
+	font-weight: bold;
+	background: var(--bg-primary);
+	color: var(--text-primary);
+	border-bottom: 1px solid var(--border-color);
 }
 
 .my-table :global(.ant-table-tbody > tr:hover > td) {
-  background: rgba(67, 97, 238, 0.05);
+	background: rgba(77, 171, 247, 0.1);
 }
 
 .my-table :global(.ant-table-cell) {
-  border-right: 1px solid var(--border-color);
-  color: var(--text-primary);
+	border-right: 1px solid var(--border-color);
+	color: var(--text-primary);
+}
+
+.my-table :global(.ant-table-tbody > tr) {
+	background: var(--bg-secondary);
+}
+
+.my-table :global(.ant-table-tbody > tr:nth-child(even)) {
+	background: var(--bg-primary);
+}
+
+.my-table :global(.ant-pagination-item) {
+	background: var(--bg-secondary);
+	border-color: var(--border-color);
+	color: var(--text-primary);
+}
+
+.my-table :global(.ant-pagination-item:hover) {
+	border-color: var(--accent-color);
+}
+
+.my-table :global(.ant-pagination-item-active) {
+	background: var(--accent-color);
+	border-color: var(--accent-color);
+}
+
+.my-table :global(.ant-pagination-item-active a) {
+	color: white;
 }
 .my-table :global(.ant-table-row > td:last-child) {
   border-right: none;

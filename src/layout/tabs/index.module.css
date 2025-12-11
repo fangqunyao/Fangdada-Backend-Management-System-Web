@@ -13,6 +13,23 @@
   margin: 0;
 }
 
+.tabsWrapper :global(.ant-tabs-tab) {
+  color: var(--text-secondary) !important;
+  transition: all 0.3s ease;
+}
+
+.tabsWrapper :global(.ant-tabs-tab:hover) {
+  color: var(--text-primary) !important;
+}
+
+.tabsWrapper :global(.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  color: var(--accent-color) !important;
+}
+
+.tabsWrapper :global(.ant-tabs-ink-bar) {
+  background: var(--accent-color) !important;
+}
+
 .tabLabel {
   display: flex;
   align-items: center;

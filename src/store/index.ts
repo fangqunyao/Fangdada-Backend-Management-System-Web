@@ -12,21 +12,24 @@ interface AppState {
   currentMenu: string;
   tabs: Tab[];
   activeTabKey: string;
+  isDarkTheme: boolean;
   updataCollapsed: () => void;
   setCurrentMenu: (menu: string) => void;
   addTab: (tab: Tab) => void;
   removeTab: (key: string) => void;
   setActiveTab: (key: string) => void;
+  toggleTheme: () => void;
   resetStore: () => void;
 }
 
 export const useStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       collapsed: false,
       currentMenu: "/home",
       tabs: [{ label: "首页", key: "/home", closable: false }],
       activeTabKey: "/home",
+      isDarkTheme: false,
       setCurrentMenu: (menu: string) => set(() => ({ currentMenu: menu })),
       updataCollapsed: () => set((state) => ({ collapsed: !state.collapsed })),
       addTab: (tab: Tab) =>
@@ -47,12 +50,23 @@ export const useStore = create<AppState>()(
           return { tabs: newTabs, activeTabKey: newActiveKey };
         }),
       setActiveTab: (key: string) => set(() => ({ activeTabKey: key })),
+      toggleTheme: () => {
+        const newTheme = !get().isDarkTheme;
+        set(() => ({ isDarkTheme: newTheme }));
+        // 应用主题到document元素
+        if (newTheme) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      },
       resetStore: () =>
         set(() => ({
           collapsed: false,
           currentMenu: "/home",
           tabs: [{ label: "首页", key: "/home", closable: false }],
           activeTabKey: "/home",
+          isDarkTheme: false,
         })),
     }),
     {

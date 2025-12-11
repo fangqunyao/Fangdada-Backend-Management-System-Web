@@ -33,3 +33,18 @@
 .userInfo:hover {
     background-color: var(--bg-primary);
 }
+
+/* 主题切换按钮样式 */
+.themeToggleBtn {
+    transition: all 0.3s ease;
+    border-radius: 6px;
+}
+
+.themeToggleBtn:hover {
+    background-color: var(--bg-primary) !important;
+    transform: scale(1.05);
+}
+.right {
+    display: flex;
+    align-items: center;
+}

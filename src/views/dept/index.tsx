@@ -8,6 +8,7 @@ import {
   Select,
   InputNumber,
   Modal,
+  Card,
   message,
 } from "antd";
 import type { TableColumnsType } from "antd";
@@ -149,66 +150,77 @@ export default function Dept() {
   };
 
   return (
-    <div className={styles.wrapdept}>
-      {/* 搜索栏 */}
-      <Form layout="inline" form={form}>
-        <Form.Item name="deptName" label="部门名称">
-          <Input placeholder="请输入部门名称" />
-        </Form.Item>
-        <Form.Item>
-          <Button onClick={getDeptListFn} type="primary">
-            查询
-          </Button>
-          <Button onClick={resetContent}>重置</Button>
-        </Form.Item>
-      </Form>
+    <div style={{ padding: 20 }}>
+      {/* 搜索表单 */}
+      <Card
+        className="searchCard"
+        style={{ marginBottom: 20 }}
+        bodyStyle={{ padding: 24 }}
+      >
+        <Form layout="inline" form={form} style={{ flexWrap: "wrap", gap: 16 }}>
+          <Form.Item name="deptName" label="部门名称">
+            <Input placeholder="请输入部门名称" />
+          </Form.Item>
+          <Form.Item>
+            <Space>
+              <Button onClick={getDeptListFn} type="primary">
+                查询
+              </Button>
+              <Button onClick={resetContent}>重置</Button>
+              <Button onClick={addDept} type="primary">
+                新增部门
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Card>
+
+      {/* 表格设置区域 */}
+      <Card style={{ marginBottom: 16 }} size="small">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div>
+            <strong>部门列表</strong>
+          </div>
+          <Space align="center">
+            <span>尺寸：</span>
+            <Select
+              value={tableSize}
+              style={{ width: 120 }}
+              onChange={(val) => setTableSize(val as any)}
+              options={[
+                { label: "默认 (default)", value: "default" },
+                { label: "中 (middle)", value: "middle" },
+                { label: "小 (small)", value: "small" },
+              ]}
+            />
+
+            <span>行内边距：</span>
+            <InputNumber
+              min={0}
+              max={40}
+              value={customPadding}
+              onChange={(v) => setCustomPadding(Number(v || 0))}
+              formatter={(v) => `${v}px`}
+              parser={(v) => Number(String(v).replace(/px/g, ""))}
+              style={{ width: 110 }}
+            />
+          </Space>
+        </div>
+      </Card>
 
       {/* 表格 */}
-      <div className="wrap-table">
-        <div className="header">
-          <div className="title">部门列表</div>
-          <div className="action">
-            <Space align="center">
-              <Button onClick={addDept}>新增部门</Button>
-
-              <span>尺寸：</span>
-              <Select
-                value={tableSize}
-                style={{ width: 120 }}
-                onChange={(val) => setTableSize(val as any)}
-                options={[
-                  { label: "默认 (default)", value: "default" },
-                  { label: "中 (middle)", value: "middle" },
-                  { label: "小 (small)", value: "small" },
-                ]}
-              />
-
-              <span>行内边距：</span>
-              <InputNumber
-                min={0}
-                max={40}
-                value={customPadding}
-                onChange={(v) => setCustomPadding(Number(v || 0))}
-                formatter={(v) => `${v}px`}
-                parser={(v) => Number(String(v).replace(/px/g, ""))}
-                style={{ width: 110 }}
-              />
-            </Space>
-          </div>
-        </div>
-
-        <Table
-          columns={columns}
-          dataSource={deptList}
-          rowKey="key"
-          size={tableSize === "default" ? undefined : tableSize}
-          style={{ ["--custom-row-padding" as any]: `${customPadding}px` }}
-          expandable={{
-            expandedRowKeys: expandedKeys,
-            onExpandedRowsChange: setExpandedKeys,
-          }}
-        />
-      </div>
+      <Table
+        columns={columns}
+        dataSource={deptList}
+        rowKey="key"
+        size={tableSize === "default" ? undefined : tableSize}
+        className="my-table"
+        style={{ ["--custom-row-padding" as any]: `${customPadding}px` }}
+        expandable={{
+          expandedRowKeys: expandedKeys,
+          onExpandedRowsChange: (keys) => setExpandedKeys(keys as React.Key[]),
+        }}
+      />
 
       <CreateDept mref={deptRef} onSendData={getDeptListFn} />
     </div>

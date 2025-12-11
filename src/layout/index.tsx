@@ -56,8 +56,8 @@ export default function LayoutComponent() {
           <div className={styles.wrapper}>
             <Outlet />
           </div>
-          <Footer />
         </div>
+        <Footer />
       </Layout>
     </Layout>
   );
