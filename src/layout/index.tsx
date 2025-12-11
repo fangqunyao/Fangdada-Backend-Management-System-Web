@@ -40,7 +40,13 @@ export default function LayoutComponent() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        width={240}
+        collapsedWidth={80}
+      >
         <SiderMenu />
       </Sider>
       <Layout>
