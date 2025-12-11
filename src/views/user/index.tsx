@@ -11,6 +11,7 @@ import {
   Switch,
   Popconfirm,
   Form,
+  Card,
   message,
 } from "antd";
 import {
@@ -278,62 +279,68 @@ const UserManagement: React.FC = () => {
   return (
     <div style={{ padding: 20 }}>
       {/* 搜索表单 */}
-      <Form
-        form={form}
-        layout="inline"
-        style={{ marginBottom: 20, flexWrap: "wrap", gap: 16 }}
+      <Card
+        className={styles.searchCard}
+        style={{ marginBottom: 20 }}
+        bodyStyle={{ padding: 24 }}
       >
-        <Form.Item name="username" label="用户账号">
-          <Input
-            placeholder="请输入用户账号"
-            allowClear
-            style={{ width: 200 }}
-          />
-        </Form.Item>
+        <Form
+          form={form}
+          layout="inline"
+          style={{ flexWrap: "wrap", gap: 16 }}
+        >
+          <Form.Item name="username" label="用户账号">
+            <Input
+              placeholder="请输入用户账号"
+              allowClear
+              style={{ width: 200 }}
+            />
+          </Form.Item>
 
-        <Form.Item name="status" label="账号状态">
-          <Select placeholder="请选择" style={{ width: 200 }} allowClear>
-            <Option value="all">全部</Option>
-            <Option value="active">启用</Option>
-            <Option value="inactive">停用</Option>
-          </Select>
-        </Form.Item>
+          <Form.Item name="status" label="账号状态">
+            <Select placeholder="请选择" style={{ width: 200 }} allowClear>
+              <Option value="all">全部</Option>
+              <Option value="active">启用</Option>
+              <Option value="inactive">停用</Option>
+            </Select>
+          </Form.Item>
 
-        <Form.Item name="timeRange" label="创建时间">
-          <RangePicker
-            showTime
-            format="YYYY-MM-DD HH:mm:ss"
-            style={{ width: 280 }}
-          />
-        </Form.Item>
+          <Form.Item name="timeRange" label="创建时间">
+            <RangePicker
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+              style={{ width: 280 }}
+            />
+          </Form.Item>
 
-        <Form.Item>
-          <Space>
+          <Form.Item>
+            <Space>
+              <Button
+                type="primary"
+                icon={<SearchOutlined />}
+                onClick={handleSearch}
+              >
+                搜索
+              </Button>
+              <Button icon={<ReloadOutlined />} onClick={handleReset}>
+                重置
+              </Button>
+            </Space>
+          </Form.Item>
+
+          <Form.Item style={{ marginLeft: "auto" }}>
             <Button
-              type="primary"
-              icon={<SearchOutlined />}
-              onClick={handleSearch}
+              type="dashed"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                handleCreateUser();
+              }}
             >
-              搜索
+              新增
             </Button>
-            <Button icon={<ReloadOutlined />} onClick={handleReset}>
-              重置
-            </Button>
-          </Space>
-        </Form.Item>
-
-        <Form.Item style={{ marginLeft: "auto" }}>
-          <Button
-            type="dashed"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              handleCreateUser();
-            }}
-          >
-            新增
-          </Button>
-        </Form.Item>
-      </Form>
+          </Form.Item>
+        </Form>
+      </Card>
 
       {/* 表格 */}
       <Table

@@ -1,7 +1,8 @@
 .tabsWrapper {
   padding: 0 16px;
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .tabsWrapper :global(.ant-tabs) {

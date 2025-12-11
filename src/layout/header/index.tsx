@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Dropdown, Button } from "antd";
+import { Dropdown, Button, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store";
 import storage from "../../utils/storage";
@@ -11,6 +11,12 @@ import styles from "./index.module.css";
 export default function NavHeader() {
   const { collapsed, updataCollapsed, resetStore } = useStore();
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState<any>(null);
+
+  useEffect(() => {
+    const info = storage.getItem("info");
+    setUserInfo(info);
+  }, []);
   const items: MenuProps["items"] = [
     {
       key: "profile",
@@ -54,7 +60,10 @@ export default function NavHeader() {
       </div>
       <div className={styles.right}>
         <Dropdown menu={{ items, onClick }} trigger={["hover"]}>
-          <span className={styles.nickName}>panda</span>
+          <div className={styles.userInfo}>
+            <Avatar size="small" icon={<UserOutlined />} style={{ marginRight: 8 }} />
+            <span className={styles.nickName}>{userInfo?.nickname || userInfo?.username || '用户'}</span>
+          </div>
         </Dropdown>
       </div>
     </div>

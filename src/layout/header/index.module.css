@@ -3,9 +3,12 @@
     justify-content: space-between;
     align-items: center;
     height: 50px;
-    background-color: #a79797;
+    background-color: var(--bg-secondary);
     padding: 0 20px;
-    color: #241d1d;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
 }
 .left{
     display: flex;
@@ -13,4 +16,20 @@
 }
 .nickName{
     cursor: pointer;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+.nickName:hover {
+    color: var(--accent-color);
+}
+.userInfo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.userInfo:hover {
+    background-color: var(--bg-primary);
 }

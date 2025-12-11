@@ -9,6 +9,7 @@ import {
   Space,
   Switch,
   Modal,
+  Card,
   message,
 } from "antd";
 import {
@@ -20,6 +21,7 @@ import {
 } from "@ant-design/icons";
 import postApi from "@/api/post";
 import CreatePost from "./components/createPost";
+import styles from "./index.module.css";
 
 // 岗位数据类型定义
 interface Position {
@@ -207,39 +209,45 @@ const PositionList = () => {
       <h2>岗位管理</h2>
 
       {/* 搜索表单 */}
-      <Form
-        form={form}
-        layout="inline"
-        onFinish={handleSearch}
+      <Card
+        className={styles.searchCard}
         style={{ marginBottom: 20 }}
+        bodyStyle={{ padding: 24 }}
       >
-        <Form.Item label="岗位名称" name="postName">
-          <Input placeholder="请输入岗位名称" />
-        </Form.Item>
-        <Form.Item label="岗位状态" name="postStatus">
-          <Select placeholder="请选择岗位状态">
-            <Select.Option value={1}>启用</Select.Option>
-            <Select.Option value={0}>停用</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label="创建时间" name="createTime">
-          <DatePicker
-            showTime
-            format="YYYY-MM-DD HH:mm:ss"
-            placeholder="请选择创建时间"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
-            搜索
-          </Button>
-        </Form.Item>
-        <Form.Item>
-          <Button onClick={handleReset} icon={<ReloadOutlined />}>
-            重置
-          </Button>
-        </Form.Item>
-      </Form>
+        <Form
+          form={form}
+          layout="inline"
+          onFinish={handleSearch}
+          style={{ flexWrap: "wrap", gap: 16 }}
+        >
+          <Form.Item label="岗位名称" name="postName">
+            <Input placeholder="请输入岗位名称" />
+          </Form.Item>
+          <Form.Item label="岗位状态" name="postStatus">
+            <Select placeholder="请选择岗位状态">
+              <Select.Option value={1}>启用</Select.Option>
+              <Select.Option value={0}>停用</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="创建时间" name="createTime">
+            <DatePicker
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+              placeholder="请选择创建时间"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Space>
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+                搜索
+              </Button>
+              <Button onClick={handleReset} icon={<ReloadOutlined />}>
+                重置
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Card>
 
       {/* 操作按钮 */}
       <Space style={{ marginBottom: 16 }}>

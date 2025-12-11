@@ -1,16 +1,22 @@
 .navSide{
-    background-color: var(#f8f9fa);
+    background-color: var(--menu-bg);
     height: 100vh;
     margin-left: 10px;
+    transition: background-color 0.3s ease;
 }
 .logo{
     display: flex;
     align-items: center;
     font-size: 20px;
-    color: #fff;
+    color: var(--menu-text);
     height: 50px;
     line-height: 50px;
     cursor: pointer;
+    padding: 0 16px;
+    transition: color 0.3s ease;
+}
+.logo:hover {
+    color: var(--accent-color);
 }
 .img{
     width: 32px;
