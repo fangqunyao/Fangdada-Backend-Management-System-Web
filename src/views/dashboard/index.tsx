@@ -1,5 +1,16 @@
-import React from 'react';
-import { Row, Col, Card, Statistic, Progress, Button, List, Avatar, Badge, Timeline } from 'antd';
+import React from "react";
+import {
+  Row,
+  Col,
+  Card,
+  Statistic,
+  Progress,
+  Button,
+  List,
+  Avatar,
+  Badge,
+  Timeline,
+} from "antd";
 import {
   UserOutlined,
   TeamOutlined,
@@ -19,169 +30,438 @@ import {
   DeleteOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
-  ExclamationCircleOutlined
-} from '@ant-design/icons';
-import styles from './index.module.css';
+  ExclamationCircleOutlined,
+  FullscreenOutlined,
+} from "@ant-design/icons";
+import ReactECharts from "echarts-for-react";
+import styles from "./index.module.css";
 
 export default function Dashboard() {
   // 匹配首页核心功能的统计数据
   const stats = [
     {
-      title: '活跃用户',
+      title: "活跃用户",
       value: 10000,
       icon: <UserOutlined />,
-      color: '#1890ff',
-      change: '+15%',
-      changeType: 'increase',
-      desc: '每日活跃用户数量'
+      color: "#1890ff",
+      change: "+15%",
+      changeType: "increase",
+      desc: "每日活跃用户数量",
     },
     {
-      title: '系统性能',
+      title: "系统性能",
       value: 99.9,
       icon: <BarChartOutlined />,
-      color: '#52c41a',
-      change: '+0.1%',
-      changeType: 'increase',
-      desc: '系统响应时间(ms)'
+      color: "#52c41a",
+      change: "+0.1%",
+      changeType: "increase",
+      desc: "系统响应时间(ms)",
     },
     {
-      title: '安全等级',
-      value: 'A+',
+      title: "安全等级",
+      value: "A+",
       icon: <SafetyCertificateOutlined />,
-      color: '#faad14',
-      change: '稳定',
-      changeType: 'stable',
-      desc: '安全评估等级'
+      color: "#faad14",
+      change: "稳定",
+      changeType: "stable",
+      desc: "安全评估等级",
     },
     {
-      title: '企业客户',
+      title: "企业客户",
       value: 500,
       icon: <TeamOutlined />,
-      color: '#722ed1',
-      change: '+8%',
-      changeType: 'increase',
-      desc: '合作企业数量'
-    }
+      color: "#722ed1",
+      change: "+8%",
+      changeType: "increase",
+      desc: "合作企业数量",
+    },
   ];
 
   const systemCapabilities = [
     {
-      title: '高效性能',
+      title: "高效性能",
       value: 98,
       icon: <RocketOutlined />,
-      color: '#1890ff',
-      status: '优秀',
-      desc: '平均响应时间 < 100ms'
+      color: "#1890ff",
+      status: "优秀",
+      desc: "平均响应时间 < 100ms",
     },
     {
-      title: '安全可靠',
+      title: "安全可靠",
       value: 100,
       icon: <SafetyCertificateOutlined />,
-      color: '#52c41a',
-      status: '安全',
-      desc: '7*24小时安全监控'
+      color: "#52c41a",
+      status: "安全",
+      desc: "7*24小时安全监控",
     },
     {
-      title: '团队协作',
+      title: "团队协作",
       value: 95,
       icon: <TeamOutlined />,
-      color: '#faad14',
-      status: '活跃',
-      desc: '实时协作项目数'
+      color: "#faad14",
+      status: "活跃",
+      desc: "实时协作项目数",
     },
     {
-      title: '数据分析',
+      title: "数据分析",
       value: 92,
       icon: <BarChartOutlined />,
-      color: '#f5222d',
-      status: '精准',
-      desc: '数据分析准确率'
+      color: "#f5222d",
+      status: "精准",
+      desc: "数据分析准确率",
     },
     {
-      title: '全球化',
+      title: "全球化",
       value: 85,
       icon: <GlobalOutlined />,
-      color: '#13c2c2',
-      status: '覆盖',
-      desc: '支持的国家/地区'
+      color: "#13c2c2",
+      status: "覆盖",
+      desc: "支持的国家/地区",
     },
     {
-      title: '灵活配置',
+      title: "灵活配置",
       value: 96,
       icon: <SettingOutlined />,
-      color: '#722ed1',
-      status: '灵活',
-      desc: '配置自定义程度'
-    }
+      color: "#722ed1",
+      status: "灵活",
+      desc: "配置自定义程度",
+    },
   ];
 
   const quickActions = [
-    { title: '用户管理', icon: <UserOutlined />, color: '#1890ff', action: 'userManagement', desc: '管理系统用户' },
-    { title: '内容发布', icon: <FileTextOutlined />, color: '#52c41a', action: 'contentPublish', desc: '发布新内容' },
-    { title: '数据分析', icon: <BarChartOutlined />, color: '#faad14', action: 'dataAnalysis', desc: '查看数据报表' },
-    { title: '系统设置', icon: <SettingOutlined />, color: '#f5222d', action: 'systemSettings', desc: '配置系统参数' },
-    { title: '安全监控', icon: <SafetyCertificateOutlined />, color: '#13c2c2', action: 'securityMonitor', desc: '实时安全监控' },
-    { title: '团队协作', icon: <TeamOutlined />, color: '#722ed1', action: 'teamCollaboration', desc: '协作工作区' }
+    {
+      title: "用户管理",
+      icon: <UserOutlined />,
+      color: "#1890ff",
+      action: "userManagement",
+      desc: "管理系统用户",
+    },
+    {
+      title: "内容发布",
+      icon: <FileTextOutlined />,
+      color: "#52c41a",
+      action: "contentPublish",
+      desc: "发布新内容",
+    },
+    {
+      title: "数据分析",
+      icon: <BarChartOutlined />,
+      color: "#faad14",
+      action: "dataAnalysis",
+      desc: "查看数据报表",
+    },
+    {
+      title: "系统设置",
+      icon: <SettingOutlined />,
+      color: "#f5222d",
+      action: "systemSettings",
+      desc: "配置系统参数",
+    },
+    {
+      title: "安全监控",
+      icon: <SafetyCertificateOutlined />,
+      color: "#13c2c2",
+      action: "securityMonitor",
+      desc: "实时安全监控",
+    },
+    {
+      title: "团队协作",
+      icon: <TeamOutlined />,
+      color: "#722ed1",
+      action: "teamCollaboration",
+      desc: "协作工作区",
+    },
   ];
 
   const recentActivities = [
     {
-      type: 'user',
-      title: '新用户注册',
-      description: '用户张三完成了注册',
-      time: '2分钟前',
-      color: '#1890ff',
-      avatar: '👤'
+      type: "user",
+      title: "新用户注册",
+      description: "用户张三完成了注册",
+      time: "2分钟前",
+      color: "#1890ff",
+      avatar: "👤",
     },
     {
-      type: 'content',
-      title: '文章发布',
-      description: '新文章《系统更新指南》已发布',
-      time: '5分钟前',
-      color: '#52c41a',
-      avatar: '📄'
+      type: "content",
+      title: "文章发布",
+      description: "新文章《系统更新指南》已发布",
+      time: "5分钟前",
+      color: "#52c41a",
+      avatar: "📄",
     },
     {
-      type: 'system',
-      title: '系统备份',
-      description: '自动备份任务已完成',
-      time: '15分钟前',
-      color: '#faad14',
-      avatar: '💾'
+      type: "system",
+      title: "系统备份",
+      description: "自动备份任务已完成",
+      time: "15分钟前",
+      color: "#faad14",
+      avatar: "💾",
     },
     {
-      type: 'security',
-      title: '安全扫描',
-      description: '系统安全扫描完成，无异常',
-      time: '1小时前',
-      color: '#f5222d',
-      avatar: '🔒'
-    }
+      type: "security",
+      title: "安全扫描",
+      description: "系统安全扫描完成，无异常",
+      time: "1小时前",
+      color: "#f5222d",
+      avatar: "🔒",
+    },
   ];
 
   const systemAlerts = [
     {
-      type: 'success',
-      title: '系统运行正常',
-      description: '所有服务运行稳定',
-      time: '现在',
-      icon: <CheckCircleOutlined />
+      type: "success",
+      title: "系统运行正常",
+      description: "所有服务运行稳定",
+      time: "现在",
+      icon: <CheckCircleOutlined />,
     },
     {
-      type: 'info',
-      title: '定期维护提醒',
-      description: '系统将于今晚2:00进行例行维护',
-      time: '2小时后',
-      icon: <ClockCircleOutlined />
+      type: "info",
+      title: "定期维护提醒",
+      description: "系统将于今晚2:00进行例行维护",
+      time: "2小时后",
+      icon: <ClockCircleOutlined />,
     },
     {
-      type: 'warning',
-      title: '存储空间警告',
-      description: '数据存储空间使用率已达85%',
-      time: '30分钟前',
-      icon: <ExclamationCircleOutlined />
-    }
+      type: "warning",
+      title: "存储空间警告",
+      description: "数据存储空间使用率已达85%",
+      time: "30分钟前",
+      icon: <ExclamationCircleOutlined />,
+    },
   ];
+
+  // 大屏展示图表配置
+  const lineChartOption = {
+    title: {
+      text: '用户增长趋势',
+      left: 'center',
+      textStyle: {
+        color: 'var(--text-primary)',
+        fontSize: 16,
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    legend: {
+      data: ['活跃用户', '新增用户'],
+      top: 30,
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'],
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        name: '活跃用户',
+        type: 'line',
+        stack: 'Total',
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        smooth: true,
+        itemStyle: { color: '#1890ff' },
+      },
+      {
+        name: '新增用户',
+        type: 'line',
+        stack: 'Total',
+        data: [220, 182, 191, 234, 290, 330, 310],
+        smooth: true,
+        itemStyle: { color: '#52c41a' },
+      },
+    ],
+  };
+
+  const barChartOption = {
+    title: {
+      text: '各部门用户统计',
+      left: 'center',
+      textStyle: {
+        color: 'var(--text-primary)',
+        fontSize: 16,
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow',
+      },
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    xAxis: {
+      type: 'category',
+      data: ['技术部', '销售部', '市场部', '财务部', '人事部'],
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        name: '用户数量',
+        type: 'bar',
+        data: [120, 200, 150, 80, 70],
+        itemStyle: {
+          color: function(params: any) {
+            const colors = ['#1890ff', '#52c41a', '#faad14', '#f5222d', '#722ed1'];
+            return colors[params.dataIndex];
+          },
+        },
+      },
+    ],
+  };
+
+  const pieChartOption = {
+    title: {
+      text: '用户角色分布',
+      left: 'center',
+      textStyle: {
+        color: 'var(--text-primary)',
+        fontSize: 16,
+      },
+    },
+    tooltip: {
+      trigger: 'item',
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+    },
+    series: [
+      {
+        name: '用户角色',
+        type: 'pie',
+        radius: '50%',
+        data: [
+          { value: 1048, name: '管理员' },
+          { value: 735, name: '普通用户' },
+          { value: 580, name: '访客' },
+          { value: 484, name: '开发者' },
+          { value: 300, name: '测试员' },
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+    ],
+  };
+
+  const gaugeChartOption = {
+    title: {
+      text: '系统性能指标',
+      left: 'center',
+      textStyle: {
+        color: 'var(--text-primary)',
+        fontSize: 16,
+      },
+    },
+    series: [
+      {
+        name: '系统性能',
+        type: 'gauge',
+        progress: {
+          show: true,
+        },
+        detail: {
+          valueAnimation: true,
+          formatter: '{value}%',
+        },
+        data: [
+          {
+            value: 85,
+            name: '性能评分',
+          },
+        ],
+      },
+    ],
+  };
+
+  const areaChartOption = {
+    title: {
+      text: '访问量统计',
+      left: 'center',
+      textStyle: {
+        color: 'var(--text-primary)',
+        fontSize: 16,
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985',
+        },
+      },
+    },
+    legend: {
+      data: ['访问量', '页面浏览量'],
+      top: 30,
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: 'category',
+        boundaryGap: false,
+        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+      },
+    ],
+    yAxis: [
+      {
+        type: 'value',
+      },
+    ],
+    series: [
+      {
+        name: '访问量',
+        type: 'line',
+        stack: 'Total',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [120, 132, 101, 134, 90, 230, 210],
+        smooth: true,
+        itemStyle: { color: '#1890ff' },
+      },
+      {
+        name: '页面浏览量',
+        type: 'line',
+        stack: 'Total',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [220, 182, 191, 234, 290, 330, 310],
+        smooth: true,
+        itemStyle: { color: '#52c41a' },
+      },
+    ],
+  };
 
   return (
     <div className={styles.dashboard}>
@@ -195,11 +475,18 @@ export default function Dashboard() {
                 value={stat.value}
                 prefix={<span style={{ color: stat.color }}>{stat.icon}</span>}
                 suffix={
-                  <span style={{
-                    color: stat.changeType === 'increase' ? '#52c41a' : '#f5222d',
-                    fontSize: '14px'
-                  }}>
-                    {stat.changeType === 'increase' ? <RiseOutlined /> : <FallOutlined />}
+                  <span
+                    style={{
+                      color:
+                        stat.changeType === "increase" ? "#52c41a" : "#f5222d",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {stat.changeType === "increase" ? (
+                      <RiseOutlined />
+                    ) : (
+                      <FallOutlined />
+                    )}
                     {stat.change}
                   </span>
                 }
@@ -215,13 +502,19 @@ export default function Dashboard() {
           <Col xs={24} sm={12} md={8} key={index}>
             <Card className={styles.systemCard}>
               <div className={styles.systemStat}>
-                <div className={styles.systemIcon} style={{ color: stat.color }}>
+                <div
+                  className={styles.systemIcon}
+                  style={{ color: stat.color }}
+                >
                   {stat.icon}
                 </div>
                 <div className={styles.systemInfo}>
                   <div className={styles.systemTitle}>{stat.title}</div>
                   <div className={styles.systemValue}>{stat.value}%</div>
-                  <div className={styles.systemStatus} style={{ color: stat.color }}>
+                  <div
+                    className={styles.systemStatus}
+                    style={{ color: stat.color }}
+                  >
                     {stat.status}
                   </div>
                   <div className={styles.systemDesc}>{stat.desc}</div>
@@ -246,7 +539,9 @@ export default function Dashboard() {
                 style={{ borderColor: action.color }}
                 onClick={() => console.log(`执行操作: ${action.action}`)}
               >
-                <span style={{ color: action.color, marginRight: 8 }}>{action.icon}</span>
+                <span style={{ color: action.color, marginRight: 8 }}>
+                  {action.icon}
+                </span>
                 {action.title}
               </Button>
             </Col>
@@ -298,7 +593,7 @@ export default function Dashboard() {
                   <List.Item.Meta
                     avatar={
                       <Avatar
-                        style={{ backgroundColor: item.color, color: '#fff' }}
+                        style={{ backgroundColor: item.color, color: "#fff" }}
                         size="small"
                       >
                         {item.avatar}
@@ -320,22 +615,110 @@ export default function Dashboard() {
       </Row>
 
       {/* 系统警报 */}
-      <Card title="系统警报" className={styles.alertsCard} style={{ marginTop: 24 }}>
+      <Card
+        title="系统警报"
+        className={styles.alertsCard}
+        style={{ marginTop: 24 }}
+      >
         <Timeline>
           {systemAlerts.map((alert, index) => (
             <Timeline.Item
               key={index}
-              color={alert.type === 'success' ? 'green' : alert.type === 'warning' ? 'orange' : 'blue'}
+              color={
+                alert.type === "success"
+                  ? "green"
+                  : alert.type === "warning"
+                  ? "orange"
+                  : "blue"
+              }
               dot={alert.icon}
             >
               <div className={styles.alertItem}>
                 <div className={styles.alertTitle}>{alert.title}</div>
-                <div className={styles.alertDescription}>{alert.description}</div>
+                <div className={styles.alertDescription}>
+                  {alert.description}
+                </div>
                 <div className={styles.alertTime}>{alert.time}</div>
               </div>
             </Timeline.Item>
           ))}
         </Timeline>
+      </Card>
+
+      {/* 大屏数据展示 */}
+      <Card
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span>大屏数据展示</span>
+            <Button
+              type="text"
+              icon={<FullscreenOutlined />}
+              onClick={() => console.log('全屏显示')}
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              全屏
+            </Button>
+          </div>
+        }
+        className={styles.largeScreenCard}
+        style={{ marginTop: 24 }}
+      >
+        <Row gutter={[16, 16]}>
+          {/* 用户增长趋势图 */}
+          <Col xs={24} xl={12}>
+            <Card className={styles.chartCard} style={{ height: '400px' }}>
+              <ReactECharts
+                option={lineChartOption}
+                style={{ height: '350px', width: '100%' }}
+                theme="light"
+              />
+            </Card>
+          </Col>
+
+          {/* 各部门用户统计图 */}
+          <Col xs={24} xl={12}>
+            <Card className={styles.chartCard} style={{ height: '400px' }}>
+              <ReactECharts
+                option={barChartOption}
+                style={{ height: '350px', width: '100%' }}
+                theme="light"
+              />
+            </Card>
+          </Col>
+
+          {/* 用户角色分布饼图 */}
+          <Col xs={24} lg={12} xl={8}>
+            <Card className={styles.chartCard} style={{ height: '350px' }}>
+              <ReactECharts
+                option={pieChartOption}
+                style={{ height: '300px', width: '100%' }}
+                theme="light"
+              />
+            </Card>
+          </Col>
+
+          {/* 系统性能仪表图 */}
+          <Col xs={24} lg={12} xl={8}>
+            <Card className={styles.chartCard} style={{ height: '350px' }}>
+              <ReactECharts
+                option={gaugeChartOption}
+                style={{ height: '300px', width: '100%' }}
+                theme="light"
+              />
+            </Card>
+          </Col>
+
+          {/* 访问量统计面积图 */}
+          <Col xs={24} xl={8}>
+            <Card className={styles.chartCard} style={{ height: '350px' }}>
+              <ReactECharts
+                option={areaChartOption}
+                style={{ height: '300px', width: '100%' }}
+                theme="light"
+              />
+            </Card>
+          </Col>
+        </Row>
       </Card>
     </div>
   );

@@ -20,7 +20,7 @@ const CreateDept = (props: Iprops) => {
   const [type, setType] = useState<string>();
   const [form] = Form.useForm();
 
-  // xxx 暴露方法给父组件调用
+  //暴露方法给父组件调用
   useImperativeHandle(props.mref, () => ({ openModal }));
 
   const openModal = (type?: string, data?: any | { parentId?: number }) => {
@@ -61,11 +61,11 @@ const CreateDept = (props: Iprops) => {
     console.log("res:", res);
     setDeptList(res || []);
 
-    const ctx = await userApi.getUserById(1);
+    // const ctx = await userApi.getUserById();
     const ctx2 = await userApi.searchUser();
     setUserList(ctx2.list || []);
     console.log("ctx2:", ctx2.list);
-    console.log("ctx:", ctx);
+    // console.log("ctx:", ctx);
   };
 
   return (
