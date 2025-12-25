@@ -7,18 +7,31 @@ export interface Tab {
   closable?: boolean;
 }
 
+export interface UserInfo {
+  id: number;
+  username: string;
+  nickname: string;
+  email: string;
+  phone?: string;
+  note?: string;
+  createTime?: string;
+  avatar?: string;
+}
+
 interface AppState {
   collapsed: boolean;
   currentMenu: string;
   tabs: Tab[];
   activeTabKey: string;
   isDarkTheme: boolean;
+  userInfo: UserInfo | null;
   updataCollapsed: () => void;
   setCurrentMenu: (menu: string) => void;
   addTab: (tab: Tab) => void;
   removeTab: (key: string) => void;
   setActiveTab: (key: string) => void;
   toggleTheme: () => void;
+  setUserInfo: (userInfo: UserInfo | null) => void;
   resetStore: () => void;
 }
 
@@ -30,6 +43,7 @@ export const useStore = create<AppState>()(
       tabs: [{ label: "首页", key: "/home", closable: false }],
       activeTabKey: "/home",
       isDarkTheme: false,
+      userInfo: null,
       setCurrentMenu: (menu: string) => set(() => ({ currentMenu: menu })),
       updataCollapsed: () => set((state) => ({ collapsed: !state.collapsed })),
       addTab: (tab: Tab) =>
@@ -60,6 +74,7 @@ export const useStore = create<AppState>()(
           document.documentElement.removeAttribute('data-theme');
         }
       },
+      setUserInfo: (userInfo: UserInfo | null) => set(() => ({ userInfo })),
       resetStore: () =>
         set(() => ({
           collapsed: false,
@@ -67,10 +82,20 @@ export const useStore = create<AppState>()(
           tabs: [{ label: "首页", key: "/home", closable: false }],
           activeTabKey: "/home",
           isDarkTheme: false,
+          userInfo: null,
         })),
     }),
     {
       name: "app-store",
+      // 排除 userInfo 不持久化，提高安全性
+      partialize: (state) => ({
+        collapsed: state.collapsed,
+        currentMenu: state.currentMenu,
+        tabs: state.tabs,
+        activeTabKey: state.activeTabKey,
+        isDarkTheme: state.isDarkTheme,
+        // 排除 userInfo，不在 localStorage 中持久化
+      }),
     }
   )
 );

@@ -284,11 +284,7 @@ const UserManagement: React.FC = () => {
         style={{ marginBottom: 20 }}
         bodyStyle={{ padding: 24 }}
       >
-        <Form
-          form={form}
-          layout="inline"
-          style={{ flexWrap: "wrap", gap: 16 }}
-        >
+        <Form form={form} layout="inline" style={{ flexWrap: "wrap", gap: 16 }}>
           <Form.Item name="username" label="用户账号">
             <Input
               placeholder="请输入用户账号"
@@ -346,7 +342,7 @@ const UserManagement: React.FC = () => {
       <Table
         dataSource={tableData}
         columns={columns}
-        className={styles["my-table"]}
+        // className={styles["my-table"]}
         rowKey="id"
         loading={loading}
         pagination={{

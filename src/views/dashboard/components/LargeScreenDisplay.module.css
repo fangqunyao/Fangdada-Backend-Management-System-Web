@@ -1,0 +1,46 @@
+/* 大屏数据展示样式 */
+.largeScreenCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.largeScreenCard:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.largeScreenCard :global(.ant-card-head) {
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.largeScreenCard :global(.ant-card-head-title) {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.chartCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.chartCard:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.chartCard :global(.ant-card-head) {
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.chartCard :global(.ant-card-head-title) {
+  color: var(--text-primary);
+  font-weight: 600;
+}

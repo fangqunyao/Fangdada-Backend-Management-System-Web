@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import "./index.less";
 import api from "../../api";
 import storage from "@/utils/storage";
+import { useStore } from "@/store";
 
 type FieldType = {
   username?: string;
@@ -15,12 +16,16 @@ type FieldType = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setUserInfo } = useStore();
   const [captchaBase64, setCaptchaBase64] = useState("");
   const [idKey, setIdKey] = useState("");
 
+  // 获取导航守卫鉴权传来的路径
+  const from = location.state?.from || "/home";
+
   const refreshCaptcha = () => {
     api.captcha().then((res: any) => {
-      console.log(res);
       setCaptchaBase64(res.image);
       setIdKey(res.idKey);
     });
@@ -28,33 +33,42 @@ const Login = () => {
 
   const onFinish = async (values: FieldType) => {
     console.log("Received values of form: ", values);
-    const res: any = await api.login({ ...values, idKey: idKey });
-    console.log(res);
-    // 只有在返回 token 时才保存并跳转
-    if (res && res.token) {
+
+    const res: any = await api.login({ ...values, idKey });
+
+    if (res?.token) {
+      // 保存 token 到本地存储
       storage.setItem("token", res.token);
-      // 过滤掉密码字段
+
+      // 保存用户信息（去掉密码）到 store
       const userInfo = { ...res.sysAdmin };
       if (userInfo.password) delete userInfo.password;
-      storage.setItem("info", userInfo);
-      // 登录成功后替换历史记录并跳转到首页
-      navigate("/home", { replace: true });
+      setUserInfo(userInfo);
+
+      // 保存用户ID到本地存储，用于后续恢复用户信息
+      storage.setItem("userId", userInfo.id);
+
+      //登录成功后跳回原页面
+      navigate(from, { replace: true });
     }
   };
 
   useEffect(() => {
     refreshCaptcha();
+
+    //已登录时禁止再进入登录页
+    if (storage.getItem("token")) {
+      navigate("/home", { replace: true });
+    }
   }, []);
 
   return (
     <div className="login">
       <div className="login-wrapper">
         <div className="title">系统登陆</div>
+
         <Form
           name="basic"
-          // labelCol={{ span: 8 }}
-          // wrapperCol={{ span: 16 }}
-          // style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"
@@ -85,25 +99,16 @@ const Login = () => {
                 placeholder="请输入验证码"
                 style={{ flex: 1, marginRight: 8 }}
               />
-              {/* base64验证码图片 */}
               {captchaBase64 && (
                 <img
                   src={captchaBase64}
                   alt="验证码"
                   style={{ height: 32, cursor: "pointer" }}
-                  onClick={refreshCaptcha} // 如果你有刷新验证码的方法，可以加上
+                  onClick={refreshCaptcha}
                 />
               )}
             </div>
           </Form.Item>
-          {/* 
-          <Form.Item<FieldType>
-            name="remember"
-            valuePropName="checked"
-            label={null}
-          >
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item> */}
 
           <Form.Item label={null}>
             <Button type="primary" block htmlType="submit">

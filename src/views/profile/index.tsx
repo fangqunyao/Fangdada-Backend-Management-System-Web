@@ -29,7 +29,7 @@ interface UserInfo {
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-  const { resetStore } = useStore();
+  const { resetStore, setUserInfo } = useStore();
   const [userData, setUserData] = useState<UserInfo | null>(null);
   const [form] = Form.useForm();
   const [pwdForm] = Form.useForm();
@@ -46,19 +46,20 @@ const Profile: React.FC = () => {
     );
   };
 
+  const { userInfo } = useStore();
+
   useEffect(() => {
-    const info = storage.getItem("info");
-    if (info) {
-      setUserData(info);
+    if (userInfo) {
+      setUserData(userInfo);
       form.setFieldsValue({
-        username: info.username,
-        nickname: info.nickname,
-        phone: info.phone,
-        email: info.email,
-        note: info.note,
+        username: userInfo.username,
+        nickname: userInfo.nickname,
+        phone: userInfo.phone,
+        email: userInfo.email,
+        note: userInfo.note,
       });
     }
-  }, [form]);
+  }, [form, userInfo]);
 
   if (!userData) {
     return <div>用户信息加载失败</div>;
@@ -99,10 +100,10 @@ const Profile: React.FC = () => {
                   // 调用接口保存
                   const params = { ...userData, ...values };
                   await userApi.updateUserInfo(params);
-                  // 更新本地 storage
-                  const newInfo = { ...storage.getItem("info"), ...values };
-                  storage.setItem("info", newInfo);
-                  setUserData(newInfo as any);
+                  // 更新 store 中的用户信息
+                  const newInfo = { ...userData, ...values };
+                  setUserInfo(newInfo);
+                  setUserData(newInfo);
                   message.success("保存成功");
                 } catch (err) {
                   // 校验失败或接口错误
@@ -114,15 +115,14 @@ const Profile: React.FC = () => {
             </Button>
             <Button
               onClick={() => {
-                // 关闭：重置为本地数据
-                const info = storage.getItem("info");
-                if (info) {
+                // 关闭：重置为 store 中的数据
+                if (userInfo) {
                   form.setFieldsValue({
-                    username: info.username,
-                    nickname: info.nickname,
-                    phone: info.phone,
-                    email: info.email,
-                    note: info.note,
+                    username: userInfo.username,
+                    nickname: userInfo.nickname,
+                    phone: userInfo.phone,
+                    email: userInfo.email,
+                    note: userInfo.note,
                   });
                 }
               }}

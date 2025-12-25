@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, MoonOutlined, SunOutlined } from "@ant-design/icons";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UserOutlined,
+  MoonOutlined,
+  SunOutlined,
+} from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Dropdown, Button, Avatar, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +15,9 @@ import storage from "../../utils/storage";
 import styles from "./index.module.css";
 
 export default function NavHeader() {
-  const { collapsed, updataCollapsed, resetStore, isDarkTheme, toggleTheme } = useStore();
+  const { collapsed, updataCollapsed, resetStore, isDarkTheme, toggleTheme, userInfo } =
+    useStore();
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState<any>(null);
-
-  useEffect(() => {
-    const info = storage.getItem("info");
-    setUserInfo(info);
-  }, []);
   const items: MenuProps["items"] = [
     {
       key: "profile",
@@ -59,7 +60,7 @@ export default function NavHeader() {
         />
       </div>
       <div className={styles.right}>
-        <Tooltip title={isDarkTheme ? '切换到白天模式' : '切换到黑夜模式'}>
+        <Tooltip title={isDarkTheme ? "切换到白天模式" : "切换到黑夜模式"}>
           <Button
             type="text"
             icon={isDarkTheme ? <SunOutlined /> : <MoonOutlined />}
@@ -70,14 +71,20 @@ export default function NavHeader() {
               width: 48,
               height: 48,
               marginRight: 8,
-              color: 'var(--text-primary)'
+              color: "var(--text-primary)",
             }}
           />
         </Tooltip>
         <Dropdown menu={{ items, onClick }} trigger={["hover"]}>
           <div className={styles.userInfo}>
-            <Avatar size="small" icon={<UserOutlined />} style={{ marginRight: 8 }} />
-            <span className={styles.nickName}>{userInfo?.nickname || userInfo?.username || '用户'}</span>
+            <Avatar
+              size="small"
+              icon={<UserOutlined />}
+              style={{ marginRight: 8 }}
+            />
+            <span className={styles.nickName}>
+              {userInfo?.nickname || userInfo?.username || "用户"}
+            </span>
           </div>
         </Dropdown>
       </div>

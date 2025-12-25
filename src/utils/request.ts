@@ -1,6 +1,7 @@
 import axios from "axios";
 import { message as Message } from "antd";
 import storage from "./storage";
+import { useStore } from "../store";
 const url = import.meta.env.VITE_BASE_URL;
 
 const instance = axios.create({
@@ -60,7 +61,7 @@ instance.interceptors.response.use(
   }
 );
 
-  // 使用泛型使调用方能获得拦截器处理后的 data 类型
+// 使用泛型使调用方能获得拦截器处理后的 data 类型
 export default {
   get: <T = any>(url: string, params?: any): Promise<T> =>
     instance.get(url, { params }) as unknown as Promise<T>,
@@ -69,6 +70,5 @@ export default {
   put: <T = any>(url: string, params?: any): Promise<T> =>
     instance.put(url, params) as unknown as Promise<T>,
   delete: <T = any>(url: string, data?: any): Promise<T> =>
-    instance.delete(url, { data }) as unknown as Promise<T>, 
+    instance.delete(url, { data }) as unknown as Promise<T>,
 };
-
