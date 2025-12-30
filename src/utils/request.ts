@@ -18,10 +18,15 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    // 动态注入最新的 token（避免创建实例时 token 为空或过期后未更新）
     if (config && config.headers) {
-      // @ts-ignore
-      config.headers.Authorization = `Bearer ${storage.getItem("token") || ""}`;
+      const token = storage.getItem("token");
+      if (token) {
+        // @ts-ignore
+        config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        // 显式删除，避免残留旧值
+        delete config.headers.Authorization;
+      }
     }
     return config;
   },

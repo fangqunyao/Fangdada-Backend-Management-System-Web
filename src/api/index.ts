@@ -10,4 +10,9 @@ export default {
   login(params: any) {
     return request.post("/login", params);
   },
+
+  // 获取用户权限信息
+  getPermissions() {
+    return request.get("/admin/permissions");
+  },
 };

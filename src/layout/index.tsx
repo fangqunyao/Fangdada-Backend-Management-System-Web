@@ -1,4 +1,9 @@
-import { Outlet, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useRouteLoaderData,
+  Navigate,
+} from "react-router-dom";
 import { Layout } from "antd";
 import { useStore } from "../store/index";
 import { useEffect } from "react";
@@ -25,9 +30,15 @@ const pathToLabelMap: Record<string, string> = {
 export default function LayoutComponent() {
   const { collapsed, addTab } = useStore();
   const location = useLocation();
+  const currentPath = location.pathname;
+  const data = useRouteLoaderData("layout"); //获取当前权限路由路径
+  const staticMenuPaths = ["/dashboard", "/home", "/profile", "/403"];
+
+  if (!data.menuListPath.includes(currentPath) && !staticMenuPaths.includes(currentPath)) {
+    return <Navigate to="/403" />;
+  }
 
   useEffect(() => {
-    const currentPath = location.pathname;
     const label = pathToLabelMap[currentPath];
     if (label) {
       addTab({
