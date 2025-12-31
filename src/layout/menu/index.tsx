@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   AppstoreOutlined,
   MailOutlined,
@@ -7,90 +7,112 @@ import {
   UserOutlined,
   SolutionOutlined,
   LaptopOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import styles from "./index.module.css";
-import { useStore } from "../../store/index";
-type MenuItem = Required<MenuProps>["items"][number];
+import { useStore } from "@/store/index";
+import type { MenuItem } from "@/store/index";
+import storage from "@/utils/storage";
 
-const items: MenuItem[] = [
-  {
-    key: "/home",
-    label: "首页",
-    icon: <MailOutlined />,
-    // children: [
-    //   {
-    //     key: "g1",
-    //     type: "group",
-    //     children: [
-    //       { key: "1", label: "Option 1" },
-    //       { key: "2", label: "Option 2" },
-    //       {
-    //         key: "sub3",
-    //         label: "Submenu",
-    //         children: [
-    //           { key: "7", label: "Option 7" },
-    //           { key: "8", label: "Option 8" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // ],
-  },
-  {
-    key: "/dashboard",
-    label: "仪表盘",
-    icon: <MailOutlined />,
-  },
-  {
-    key: "/user",
-    label: "基础管理",
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: "/userList", label: "用户列表", icon: <UserOutlined /> },
-      { key: "/roleList", label: "角色管理", icon: <SolutionOutlined /> },
-      { key: "/postList", label: "岗位管理", icon: <SolutionOutlined /> },
-      { key: "/menuList", label: "菜单管理", icon: <MailOutlined /> },
-      { key: "/deptList", label: "部门管理", icon: <LaptopOutlined /> },
-    ],
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "/dept",
-    label: "日志管理",
-    icon: <SettingOutlined />,
-    children: [
-      { key: "9", label: "Option 9" },
-      { key: "10", label: "Option 10" },
-      { key: "11", label: "Option 11" },
-      { key: "12", label: "Option 12" },
-    ],
-  },
-];
+type AntdMenuItem = Required<MenuProps>["items"][number];
+
+// 图标映射
+const iconMap: Record<string, React.ReactNode> = {
+  HomeOutlined: <MailOutlined />,
+  UserOutlined: <UserOutlined />,
+  SolutionOutlined: <SolutionOutlined />,
+  MailOutlined: <MailOutlined />,
+  LaptopOutlined: <LaptopOutlined />,
+  AimOutlined: <AimOutlined />,
+  // "home": <MailOutlined />,
+  // "dashboard": <MailOutlined />,
+  // "user": <AppstoreOutlined />,
+  // "role": <SolutionOutlined />,
+  // "post": <SolutionOutlined />,
+  // "menu": <MailOutlined />,
+  // "dept": <LaptopOutlined />,
+  // "log": <SettingOutlined />,
+};
+
+// 将菜单数据转换为Antd MenuItem格式
+const transformMenuItems = (menus: MenuItem[]): AntdMenuItem[] => {
+  const transformNode = (node: MenuItem): AntdMenuItem => {
+    const children = node.menuSvoList?.map(transformNode);
+    const hasChildren = children && children.length > 0;
+
+    return {
+      key: node.url || `menu-${node.id}`,
+      label: node.menuName,
+      icon: iconMap[node.icon || node.menuName.toLowerCase()] || (
+        <MailOutlined />
+      ),
+      children: hasChildren ? children : undefined,
+    };
+  };
+
+  return menus.map(transformNode);
+};
 
 const SiderMenu = () => {
   const navigate = useNavigate();
-  const { collapsed, currentMenu, setCurrentMenu } = useStore();
+  const { collapsed, currentMenu, isDarkTheme, setCurrentMenu, menus } =
+    useStore();
+
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([currentMenu]);
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setSelectedKeys([pathname]);
+  }, [pathname]);
+
+  // 默认菜单（当没有权限菜单时显示）
+  const defaultMenuItems: AntdMenuItem[] = [
+    {
+      key: "/home",
+      label: "首页",
+      icon: <MailOutlined />,
+    },
+    {
+      key: "/dashboard",
+      label: "仪表盘",
+      icon: <MailOutlined />,
+    },
+  ];
+
+  // 转换菜单数据
+  const menuItems = useMemo(() => {
+    console.log("menus:", menus);
+    if (menus && menus.length > 0) {
+      const items = transformMenuItems(menus);
+      console.log("menuItems:", items);
+      return items;
+    } else {
+      return defaultMenuItems;
+    }
+  }, [menus]);
+
   const menuClick: MenuProps["onClick"] = (e) => {
     console.log("click ", e);
     navigate(e.key);
     setCurrentMenu(e.key);
   };
+
   return (
     <div className={styles.navSide}>
       {collapsed ? "" : <div className={styles.logo}>方大大中台管理系统</div>}
 
       <Menu
         defaultSelectedKeys={[currentMenu]}
-        defaultOpenKeys={["/user"]}
+        // defaultOpenKeys={["/user"]}
+        selectedKeys={selectedKeys}
         mode="inline"
-        theme="dark"
+        theme={isDarkTheme ? "light" : "dark"}
         onClick={menuClick}
         inlineCollapsed={collapsed}
-        items={items}
+        items={menuItems}
       />
     </div>
   );

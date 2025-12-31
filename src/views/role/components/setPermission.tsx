@@ -40,6 +40,7 @@ const CreateRole = (props: Iprops) => {
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [roleInfo, setRoleInfo] = useState<any>(null);
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
+  const [halfCheckedKeys, setHalfCheckedKeys] = useState<React.Key[]>([]);
   //   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -60,7 +61,12 @@ const CreateRole = (props: Iprops) => {
   };
 
   const onOk = () => {
-    const menuIds = checkedKeys.map(Number);
+    const checkedKeysNum = checkedKeys.map(Number); //所选节点id数组
+    const halfCheckedKeysNum = halfCheckedKeys.map(Number); //半选节点id数组
+    const menuIds = Array.from(
+      new Set([...checkedKeysNum, ...halfCheckedKeysNum])
+    );
+    console.log(menuIds, halfCheckedKeysNum, "333");
     roleApi.setRolePermission({ id: roleInfo.id, menuIds }).then(() => {
       props.getRoleList?.();
       onCancel();
@@ -86,7 +92,10 @@ const CreateRole = (props: Iprops) => {
         checkable
         treeData={treeData}
         checkedKeys={checkedKeys}
-        onCheck={(keys) => setCheckedKeys(keys as React.Key[])}
+        onCheck={(keys, info) => {
+          setCheckedKeys(keys as React.Key[]);
+          setHalfCheckedKeys(info.halfCheckedKeys as React.Key[]);
+        }}
       />
     </Modal>
   );

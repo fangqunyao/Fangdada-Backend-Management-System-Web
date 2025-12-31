@@ -18,6 +18,16 @@ export interface UserInfo {
   avatar?: string;
 }
 
+export interface MenuItem {
+  id: number;
+  menuName: string;
+  url: string;
+  sort: number;
+  menuType: number; // 1:目录 2:菜单 3:按钮
+  icon?: string;
+  menuSvoList?: MenuItem[];
+}
+
 interface AppState {
   collapsed: boolean;
   currentMenu: string;
@@ -25,6 +35,7 @@ interface AppState {
   activeTabKey: string;
   isDarkTheme: boolean;
   userInfo: UserInfo | null;
+  menus: MenuItem[];
   updataCollapsed: () => void;
   setCurrentMenu: (menu: string) => void;
   addTab: (tab: Tab) => void;
@@ -32,6 +43,7 @@ interface AppState {
   setActiveTab: (key: string) => void;
   toggleTheme: () => void;
   setUserInfo: (userInfo: UserInfo | null) => void;
+  setMenus: (menus: MenuItem[]) => void;
   resetStore: () => void;
 }
 
@@ -44,6 +56,7 @@ export const useStore = create<AppState>()(
       activeTabKey: "/home",
       isDarkTheme: false,
       userInfo: null,
+      menus: [],
       setCurrentMenu: (menu: string) => set(() => ({ currentMenu: menu })),
       updataCollapsed: () => set((state) => ({ collapsed: !state.collapsed })),
       addTab: (tab: Tab) =>
@@ -75,6 +88,7 @@ export const useStore = create<AppState>()(
         }
       },
       setUserInfo: (userInfo: UserInfo | null) => set(() => ({ userInfo })),
+      setMenus: (menus: MenuItem[]) => set(() => ({ menus })),
       resetStore: () =>
         set(() => ({
           collapsed: false,
@@ -83,6 +97,7 @@ export const useStore = create<AppState>()(
           activeTabKey: "/home",
           isDarkTheme: false,
           userInfo: null,
+          menus: [],
         })),
     }),
     {

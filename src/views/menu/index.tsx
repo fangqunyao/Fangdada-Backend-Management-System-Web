@@ -2,17 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
 import DynamicAntIcon from "@/components/DynamicAntIcon";
 import menuApi from "@/api/menu";
-import {
-  Table,
-  Button,
-  Modal,
-  Form,
-  Input,
-  Space,
-  Popconfirm,
-  Card,
-  message,
-} from "antd";
+import { Table, Button, Input, Space, Popconfirm, Card, message } from "antd";
+import CreateMenuModal from "./components/CreateMenuModal";
 import styles from "./index.module.css";
 
 interface MenuItem {
@@ -20,6 +11,8 @@ interface MenuItem {
   menuName: string;
   path: string;
   icon?: string;
+  menuType?: number;
+  menuStatus?: number;
 }
 
 export default function Menu() {
@@ -32,7 +25,6 @@ export default function Menu() {
   const [query, setQuery] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [editing, setEditing] = useState<MenuItem | null>(null);
-  const [form] = Form.useForm();
   const [idCounter, setIdCounter] = useState(4);
 
   const filtered = useMemo(() => {
@@ -55,34 +47,26 @@ export default function Menu() {
 
   function openAdd() {
     setEditing(null);
-    form.resetFields();
     setModalVisible(true);
   }
 
   function openEdit(item: MenuItem) {
     setEditing(item);
-    form.setFieldsValue(item);
     setModalVisible(true);
   }
 
-  async function onOk() {
-    try {
-      const values = await form.validateFields();
-      if (editing) {
-        setItems((prev) =>
-          prev.map((it) => (it.id === editing.id ? { ...it, ...values } : it))
-        );
+  function handleModalOk(values: any) {
+    if (editing) {
+      console.log(values, "editing");
+      menuApi.updateMenu({ id: editing.id, ...values }).then(() => {
         message.success("更新成功");
-      } else {
-        const newId = idCounter;
-        setIdCounter((c) => c + 1);
-        setItems((prev) => [...prev, { id: newId, ...values }]);
+      });
+    } else {
+      menuApi.addMenu(values).then(() => {
         message.success("新增成功");
-      }
-      setModalVisible(false);
-    } catch (err) {
-      // 校验失败
+      });
     }
+    setModalVisible(false);
   }
 
   function onDelete(id: number) {
@@ -103,6 +87,19 @@ export default function Menu() {
             1: "目录",
             2: "菜单",
             3: "按钮",
+          }[v] || "—"
+        );
+      },
+    },
+    {
+      title: "状态",
+      dataIndex: "menuStatus",
+      key: "menuStatus",
+      render: (v: number) => {
+        return (
+          {
+            1: "禁用",
+            2: "启用",
           }[v] || "—"
         );
       },
@@ -150,8 +147,16 @@ export default function Menu() {
         style={{ marginBottom: 20 }}
         bodyStyle={{ padding: 24 }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <Input.Search
               placeholder="搜索菜单名称或路径"
               value={query}
@@ -160,7 +165,7 @@ export default function Menu() {
               }
               style={{ width: 300 }}
             />
-            <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
+            <span style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
               共 {items.length} 项（匹配 {filtered.length}）
             </span>
           </div>
@@ -179,36 +184,12 @@ export default function Menu() {
         pagination={{ pageSize: 8 }}
       />
 
-      <Modal
-        title={editing ? "编辑菜单" : "新建菜单"}
-        open={modalVisible}
-        onOk={onOk}
+      <CreateMenuModal
+        visible={modalVisible}
+        editing={editing}
         onCancel={() => setModalVisible(false)}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={{ name: "", path: "", icon: "" }}
-        >
-          <Form.Item
-            name="name"
-            label="名称"
-            rules={[{ required: true, message: "请输入菜单名称" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="path"
-            label="路径"
-            rules={[{ required: true, message: "请输入菜单路径" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item name="icon" label="图标">
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
+        onOk={handleModalOk}
+      />
     </div>
   );
 }

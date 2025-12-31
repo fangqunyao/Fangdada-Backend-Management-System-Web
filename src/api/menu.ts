@@ -10,4 +10,16 @@ export default {
   getMenuTreeList<T = any>(params?: any): Promise<T> {
     return request.get<T>("/menu/treelist", params);
   },
+  // 添加菜单
+  addMenu<T = any>(params?: any): Promise<T> {
+    return request.post<T>("/menu/add", params);
+  },
+  // 修改菜单
+  updateMenu<T = any>(params?: any): Promise<T> {
+    return request.post<T>("/menu/update", params);
+  },
+  // 删除菜单
+  deleteMenu<T = any>(params?: any): Promise<T> {
+    return request.post<T>("/menu/delete", params);
+  },
 };
