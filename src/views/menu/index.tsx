@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
 import DynamicAntIcon from "@/components/DynamicAntIcon";
+import AuthButton from "@/components/AuthButton";
 import menuApi from "@/api/menu";
 import { Table, Button, Input, Space, Popconfirm, Card, message } from "antd";
 import CreateMenuModal from "./components/CreateMenuModal";
@@ -120,18 +121,28 @@ export default function Menu() {
       render: (_: any, record: MenuItem) => {
         return (
           <Space>
-            <Button size="small" type="link" onClick={() => openEdit(record)}>
+            <AuthButton
+              size="small"
+              type="link"
+              permission="base:menu:edit"
+              onClick={() => openEdit(record)}
+            >
               编辑
-            </Button>
+            </AuthButton>
             <Popconfirm
               title={`确定删除菜单 "${record.menuName}" 吗？`}
               onConfirm={() => onDelete(record.id)}
               okText="是"
               cancelText="取消"
             >
-              <Button size="small" type="link" danger>
+              <AuthButton
+                size="small"
+                type="link"
+                danger
+                permission="base:menu:delete"
+              >
                 删除
-              </Button>
+              </AuthButton>
             </Popconfirm>
           </Space>
         );
@@ -169,9 +180,13 @@ export default function Menu() {
               共 {items.length} 项（匹配 {filtered.length}）
             </span>
           </div>
-          <Button type="primary" onClick={openAdd}>
+          <AuthButton
+            type="primary"
+            permission="base:menu:add"
+            onClick={openAdd}
+          >
             新建
-          </Button>
+          </AuthButton>
         </div>
       </Card>
 

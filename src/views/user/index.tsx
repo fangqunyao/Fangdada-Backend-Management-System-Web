@@ -24,6 +24,7 @@ import {
 } from "@ant-design/icons";
 // import moment, { Moment } from "moment";
 import userApi from "@/api/user";
+import AuthButton from "@/components/AuthButton";
 import CreateUser from "./components/createUser";
 import ResetPassword from "./components/resetPassword";
 
@@ -242,7 +243,8 @@ const UserManagement: React.FC = () => {
       key: "action",
       render: (_: any, record: User) => (
         <Space size="middle">
-          <Button
+          <AuthButton
+            permission="base:admin:edit"
             type="link"
             icon={<EditOutlined />}
             onClick={() => {
@@ -250,18 +252,24 @@ const UserManagement: React.FC = () => {
             }}
           >
             编辑
-          </Button>
+          </AuthButton>
           <Popconfirm
             title="确定要删除吗？"
             onConfirm={() => handleDelete(record.id)}
             okText="确定"
             cancelText="取消"
           >
-            <Button type="link" danger icon={<DeleteOutlined />}>
+            <AuthButton
+              permission="base:admin:delete"
+              type="link"
+              danger
+              icon={<DeleteOutlined />}
+            >
               删除
-            </Button>
+            </AuthButton>
           </Popconfirm>
-          <Button
+          <AuthButton
+            permission="base:admin:reset"
             type="link"
             icon={<KeyOutlined />}
             onClick={() => {
@@ -270,7 +278,7 @@ const UserManagement: React.FC = () => {
             }}
           >
             重置密码
-          </Button>
+          </AuthButton>
         </Space>
       ),
     },
@@ -325,7 +333,8 @@ const UserManagement: React.FC = () => {
           </Form.Item>
 
           <Form.Item style={{ marginLeft: "auto" }}>
-            <Button
+            <AuthButton
+              permission="base:admin:add"
               type="dashed"
               icon={<PlusOutlined />}
               onClick={() => {
@@ -333,7 +342,7 @@ const UserManagement: React.FC = () => {
               }}
             >
               新增
-            </Button>
+            </AuthButton>
           </Form.Item>
         </Form>
       </Card>

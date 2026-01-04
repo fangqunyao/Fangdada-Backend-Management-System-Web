@@ -14,6 +14,7 @@ import {
 import type { TableColumnsType } from "antd";
 import dayjs from "dayjs";
 import deptApi from "@/api/dept";
+import AuthButton from "@/components/AuthButton";
 import CreateDept from "./createDept";
 import { buildTree } from "@/utils/buildTree";
 import styles from "./index.module.css";
@@ -25,7 +26,6 @@ export default function Dept() {
   );
   const [customPadding, setCustomPadding] = useState<number>(12);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
-  
 
   const [form] = Form.useForm();
   const deptRef = useRef<{
@@ -96,11 +96,11 @@ export default function Dept() {
       key: "action",
       render: (_, record) => (
         <Space>
-          <Button type="primary" onClick={() => editDept(record)}>
+          <AuthButton permission="base:dept:edit" type="primary" onClick={() => editDept(record)}>
             编辑
-          </Button>
-          <Button onClick={() => deleteDept(record.id)}>删除</Button>
-          <Button onClick={() => subDept(record.id)}>新增</Button>
+          </AuthButton>
+          <AuthButton permission="base:dept:delete" onClick={() => deleteDept(record.id)}>删除</AuthButton>
+          <AuthButton permission="base:dept:add" onClick={() => subDept(record.id)}>新增</AuthButton>
         </Space>
       ),
     },
@@ -168,9 +168,9 @@ export default function Dept() {
                 查询
               </Button>
               <Button onClick={resetContent}>重置</Button>
-              <Button onClick={addDept} type="primary">
+              <AuthButton permission="base:dept:add" onClick={addDept} type="primary">
                 新增部门
-              </Button>
+              </AuthButton>
             </Space>
           </Form.Item>
         </Form>
@@ -178,7 +178,15 @@ export default function Dept() {
 
       {/* 表格设置区域 */}
       <Card style={{ marginBottom: 16 }} size="small">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 16,
+          }}
+        >
           <div>
             <strong>部门列表</strong>
           </div>

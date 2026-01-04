@@ -9,9 +9,10 @@ export default async function AuthLoader() {
   const menuListPath = getMenuPaths(menus);
   console.log(menuListPath, menus, res.permissions,"menuIds");
 
-  // 存储菜单到store
-  const { setMenus } = useStore.getState();
+  // 存储菜单和按钮权限到store
+  const { setMenus, setButtonList } = useStore.getState();
   setMenus(menus);
+  setButtonList(res.permissions);
 
   return { menuListPath, menus, buttonList: res.permissions };
 }

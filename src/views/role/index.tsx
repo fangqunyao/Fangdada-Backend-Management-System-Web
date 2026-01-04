@@ -3,6 +3,7 @@ import { Button, Input, Table, Form, Switch, Modal, Card } from "antd";
 import { useState, useEffect } from "react";
 import roleApi from "@/api/role";
 import type { getRoleList } from "@/types/role";
+import AuthButton from "@/components/AuthButton";
 import CreateRole from "./components/createRole";
 import SetPermission from "./components/setPermission";
 import { useRef } from "react";
@@ -137,30 +138,33 @@ export default function Role() {
       render: (record: any) => {
         return (
           <div>
-            <Button
+            <AuthButton
+              permission="base:role:edit"
               type="link"
               onClick={() => {
                 editRole(record);
               }}
             >
               编辑
-            </Button>
-            <Button
+            </AuthButton>
+            <AuthButton
+              permission="base:role:permission"
               type="link"
               onClick={() => {
                 editPermission(record);
               }}
             >
               权限
-            </Button>
-            <Button
+            </AuthButton>
+            <AuthButton
+              permission="base:role:delete"
               type="link"
               onClick={() => {
                 deleteRole(record.id);
               }}
             >
               删除
-            </Button>
+            </AuthButton>
           </div>
         );
       },
@@ -185,9 +189,9 @@ export default function Role() {
               style={{ width: 300 }}
             />
           </div>
-          <Button type="primary" onClick={openAdd}>
+          <AuthButton permission="base:role:add" type="primary" onClick={openAdd}>
             新建
-          </Button>
+          </AuthButton>
         </div>
       </Card>
 

@@ -20,6 +20,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import postApi from "@/api/post";
+import AuthButton from "@/components/AuthButton";
 import CreatePost from "./components/createPost";
 import styles from "./index.module.css";
 
@@ -184,21 +185,23 @@ const PositionList = () => {
       key: "action",
       render: (_: any, record: Position) => (
         <Space size="middle">
-          <Button
+          <AuthButton
+            permission="base:post:edit"
             type="link"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
-          </Button>
-          <Button
+          </AuthButton>
+          <AuthButton
+            permission="base:post:delete"
             type="link"
             danger
             icon={<DeleteOutlined />}
             onClick={() => handleDelete(record.id)}
           >
             删除
-          </Button>
+          </AuthButton>
         </Space>
       ),
     },
@@ -251,7 +254,8 @@ const PositionList = () => {
 
       {/* 操作按钮 */}
       <Space style={{ marginBottom: 16 }}>
-        <Button
+        <AuthButton
+          permission="base:post:add"
           type="primary"
           onClick={() => {
             createPost();
@@ -259,8 +263,9 @@ const PositionList = () => {
           icon={<PlusOutlined />}
         >
           新增
-        </Button>
-        <Button
+        </AuthButton>
+        <AuthButton
+          permission="base:post:batchDelete"
           danger
           icon={<DeleteOutlined />}
           disabled={selectedRowKeys.length === 0}
@@ -279,7 +284,7 @@ const PositionList = () => {
           }}
         >
           删除
-        </Button>
+        </AuthButton>
       </Space>
 
       {/* 表格 */}

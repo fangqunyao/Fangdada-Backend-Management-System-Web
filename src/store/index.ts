@@ -36,6 +36,7 @@ interface AppState {
   isDarkTheme: boolean;
   userInfo: UserInfo | null;
   menus: MenuItem[];
+  buttonList: string[];
   updataCollapsed: () => void;
   setCurrentMenu: (menu: string) => void;
   addTab: (tab: Tab) => void;
@@ -44,6 +45,7 @@ interface AppState {
   toggleTheme: () => void;
   setUserInfo: (userInfo: UserInfo | null) => void;
   setMenus: (menus: MenuItem[]) => void;
+  setButtonList: (buttonList: string[]) => void;
   resetStore: () => void;
 }
 
@@ -57,6 +59,7 @@ export const useStore = create<AppState>()(
       isDarkTheme: false,
       userInfo: null,
       menus: [],
+      buttonList: [],
       setCurrentMenu: (menu: string) => set(() => ({ currentMenu: menu })),
       updataCollapsed: () => set((state) => ({ collapsed: !state.collapsed })),
       addTab: (tab: Tab) =>
@@ -89,6 +92,7 @@ export const useStore = create<AppState>()(
       },
       setUserInfo: (userInfo: UserInfo | null) => set(() => ({ userInfo })),
       setMenus: (menus: MenuItem[]) => set(() => ({ menus })),
+      setButtonList: (buttonList: string[]) => set(() => ({ buttonList })),
       resetStore: () =>
         set(() => ({
           collapsed: false,
@@ -98,6 +102,7 @@ export const useStore = create<AppState>()(
           isDarkTheme: false,
           userInfo: null,
           menus: [],
+          buttonList: [],
         })),
     }),
     {
